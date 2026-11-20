@@ -1,0 +1,251 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Private profile document for an authenticated DoDo studio user.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "photoURL": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "displayName", "createdAt", "updatedAt"]
+    },
+    "SavedScenario": {
+      "title": "SavedScenario",
+      "description": "Apparel business simulation scenario saved by its owner.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "capital": {
+          "type": "number"
+        },
+        "currency": {
+          "type": "string",
+          "enum": ["EGP", "USD"]
+        },
+        "fxRate": {
+          "type": "number"
+        },
+        "location": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "market": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "category": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "fabric": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "gsm": {
+          "type": "number"
+        },
+        "sourcingOrigin": {
+          "type": "string",
+          "enum": ["local", "imported"]
+        },
+        "mfgModel": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "skuCount": {
+          "type": "number"
+        },
+        "volatility": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "salesChannel": {
+          "type": "string",
+          "maxLength": 20
+        },
+        "customUnitCost": {
+          "type": "number"
+        },
+        "customSellingPrice": {
+          "type": "number"
+        },
+        "unitCostUsd": {
+          "type": "number"
+        },
+        "suggestedRetailUsd": {
+          "type": "number"
+        },
+        "grossMarginPct": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "ownerId",
+        "name",
+        "capital",
+        "currency",
+        "fxRate",
+        "location",
+        "market",
+        "category",
+        "fabric",
+        "gsm",
+        "sourcingOrigin",
+        "mfgModel",
+        "skuCount",
+        "volatility",
+        "salesChannel",
+        "unitCostUsd",
+        "suggestedRetailUsd",
+        "grossMarginPct",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "BrandSession": {
+      "title": "BrandSession",
+      "description": "Brand identity, agreed garments, logo vector metadata, and continuity snapshot owned by a user.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "brandName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "tagline": {
+          "type": "string",
+          "maxLength": 180
+        },
+        "styleDirection": {
+          "type": "string",
+          "maxLength": 60
+        },
+        "palette": {
+          "type": "array",
+          "description": "Up to 6 hex color strings."
+        },
+        "agreedGarments": {
+          "type": "array",
+          "description": "Up to 12 agreed garment types."
+        },
+        "designNotes": {
+          "type": "string",
+          "maxLength": 1500
+        },
+        "logoShape": {
+          "type": "string",
+          "maxLength": 60
+        },
+        "motionStyle": {
+          "type": "string",
+          "maxLength": 60
+        },
+        "continuityCode": {
+          "type": "string",
+          "maxLength": 12000
+        },
+        "summaryAr": {
+          "type": "string",
+          "maxLength": 3000
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "ownerId",
+        "brandName",
+        "tagline",
+        "styleDirection",
+        "palette",
+        "agreedGarments",
+        "designNotes",
+        "logoShape",
+        "motionStyle",
+        "continuityCode",
+        "summaryAr",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private user profile owned strictly by userId."
+    },
+    "/users/{userId}/scenarios/{scenarioId}": {
+      "schema": { "$ref": "#/entities/SavedScenario" },
+      "description": "Saved simulator scenarios scoped to userId."
+    },
+    "/users/{userId}/brandSessions/{sessionId}": {
+      "schema": { "$ref": "#/entities/BrandSession" },
+      "description": "Saved brand studio identity & session continuity snapshots scoped to userId."
+    }
+  }
+}

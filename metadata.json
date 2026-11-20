@@ -1,0 +1,8 @@
+{
+  "name": "مِنسَج ستوديو — محاكي صناعة الملابس وموسوعة المصادر الـ 16",
+  "description": "منصة تفاعلية لفهم صناعة الملابس وبناء البراندات من الصفر للعالمية مع محاكاة المتغيرات ومقارنة الأفكار والوصول الحي للمصادر الـ 16 المرجعية.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,163 @@
+import type { OperatingLocation } from '../utils/simulator';
+
+export type HubCategory = 'wholesale' | 'fabric' | 'factory' | 'trims';
+
+export interface SourcingHubPin {
+  id: string;
+  locationKey: OperatingLocation;
+  nameAr: string;
+  cityAr: string;
+  category: HubCategory;
+  categoryLabelAr: string;
+  position: { lat: number; lng: number };
+  priceGuideAr: string;
+  bestForAr: string;
+  noRawFabricFriendly: boolean;
+}
+
+export const APP_SOURCING_HUBS: SourcingHubPin[] = [
+  {
+    id: 'mousky_attaba',
+    locationKey: 'cairo_giza',
+    nameAr: 'الموسكي والعتبة (مكاتب الجملة)',
+    cityAr: 'القاهرة',
+    category: 'wholesale',
+    categoryLabelAr: 'مكاتب جملة جاهزة',
+    position: { lat: 30.0522, lng: 31.2517 },
+    priceGuideAr: '170 – 390 ج.م للقطعة جملة',
+    bestForAr: 'بداية سريعة بالسيري بدون شراء خامات أو باترون',
+    noRawFabricFriendly: true,
+  },
+  {
+    id: 'gesr_el_suez',
+    locationKey: 'cairo_giza',
+    nameAr: 'جسر السويس (تجهيز وبلانكات White-Label)',
+    cityAr: 'القاهرة',
+    category: 'wholesale',
+    categoryLabelAr: 'بلانكات وتجهيز سريع',
+    position: { lat: 30.1235, lng: 31.3489 },
+    priceGuideAr: '200 – 520 ج.م للقطعة/هودي سادة',
+    bestForAr: 'هوديز وتيشيرتات سادة جاهزة للطباعة والتطريز',
+    noRawFabricFriendly: true,
+  },
+  {
+    id: 'shubra_azhar',
+    locationKey: 'cairo_giza',
+    nameAr: 'شبرا الخيمة والأزهر (الأقمشة والمصابغ)',
+    cityAr: 'القاهرة الكبرى',
+    category: 'fabric',
+    categoryLabelAr: 'أسواق الأقمشة والخامات',
+    position: { lat: 30.1286, lng: 31.2422 },
+    priceGuideAr: '240 – 430 ج.م لكيلو التريكو',
+    bestForAr: 'شراء خامات السنجل جيرسي والميلتون للتشغيل CMT',
+    noRawFabricFriendly: false,
+  },
+  {
+    id: 'obour_10th',
+    locationKey: 'cairo_giza',
+    nameAr: 'المنطقة الصناعية بالعبور والعاشر',
+    cityAr: 'شرق القاهرة',
+    category: 'factory',
+    categoryLabelAr: 'مصانع CMT و FOB للتصدير',
+    position: { lat: 30.2339, lng: 31.4841 },
+    priceGuideAr: '95 – 225 ج.م مصنعية تشغيل/قطعة',
+    bestForAr: 'تصنيع متكامل 150–500+ قطعة بمعايير تصديرية',
+    noRawFabricFriendly: false,
+  },
+  {
+    id: 'mahalla_hub',
+    locationKey: 'delta_mahalla',
+    nameAr: 'المحلة الكبرى والقيصرية (قلعة الغزل والنسيج)',
+    cityAr: 'الغربية',
+    category: 'factory',
+    categoryLabelAr: 'غزل ونسيج ووبريات مباشر',
+    position: { lat: 30.9706, lng: 31.1669 },
+    priceGuideAr: '210 – 390 ج.م لكيلو القماش المصبوغ',
+    bestForAr: 'أرخص تكلفة خامة قطنية مباشرة من المصابغ والمصانع',
+    noRawFabricFriendly: false,
+  },
+  {
+    id: 'alex_mansheya',
+    locationKey: 'alex_north',
+    nameAr: 'المنشية وزنقة الستات (جملة وإكسسوارات)',
+    cityAr: 'الإسكندرية',
+    category: 'trims',
+    categoryLabelAr: 'جملة وإكسسوارات وخيوط',
+    position: { lat: 31.1981, lng: 29.8952 },
+    priceGuideAr: '175 – 410 ج.م للقطعة جملة',
+    bestForAr: 'شراء سيري جاهز + تجهيز السحابات والتيكت والتغليف',
+    noRawFabricFriendly: true,
+  },
+  {
+    id: 'borg_el_arab',
+    locationKey: 'alex_north',
+    nameAr: 'برج العرب والعامرية الحرة',
+    cityAr: 'الإسكندرية',
+    category: 'factory',
+    categoryLabelAr: 'مصانع تصدير كبرى',
+    position: { lat: 30.9165, lng: 29.5912 },
+    priceGuideAr: '2.1 – 4.8$ مصنعية تصديرية',
+    bestForAr: 'شحن مباشر عبر ميناء الإسكندرية لأوروبا والخليج',
+    noRawFabricFriendly: false,
+  },
+  {
+    id: 'portsaid_hub',
+    locationKey: 'canal_portsaid',
+    nameAr: 'شارع التجارية وجنوب بورسعيد',
+    cityAr: 'بورسعيد',
+    category: 'wholesale',
+    categoryLabelAr: 'جملة ومستورد + منطقة صناعية',
+    position: { lat: 31.2653, lng: 32.3019 },
+    priceGuideAr: '200 – 475 ج.م للقطعة',
+    bestForAr: 'ملابس مستوردة وجاهزة أو مصانع جينز وتريكو بالمنطقة الحرة',
+    noRawFabricFriendly: true,
+  },
+  {
+    id: 'beni_suef_hub',
+    locationKey: 'upper_egypt',
+    nameAr: 'المنطقة الصناعية ببياض العرب',
+    cityAr: 'بني سويف (الصعيد)',
+    category: 'factory',
+    categoryLabelAr: 'مجمع مصانع الصعيد',
+    position: { lat: 29.0489, lng: 31.1243 },
+    priceGuideAr: '95 – 210 ج.م تشغيل/قطعة',
+    bestForAr: 'خطوط إنتاج وتجمعات ملابس قريبة لصعيد مصر',
+    noRawFabricFriendly: false,
+  },
+  {
+    id: 'riyadh_batha',
+    locationKey: 'gulf_ksa_uae',
+    nameAr: 'البطحاء والملز (مراكز جملة الرياض)',
+    cityAr: 'الرياض، السعودية',
+    category: 'wholesale',
+    categoryLabelAr: 'جملة وإكسسوارات الخليج',
+    position: { lat: 24.6333, lng: 46.7167 },
+    priceGuideAr: '6 – 14.5$ للقطعة جملة',
+    bestForAr: 'توريد وتوزيع سريع في السوق السعودي',
+    noRawFabricFriendly: true,
+  },
+  {
+    id: 'dubai_naif',
+    locationKey: 'gulf_ksa_uae',
+    nameAr: 'سوق نايف والتنين (دبي)',
+    cityAr: 'دبي، الإمارات',
+    category: 'wholesale',
+    categoryLabelAr: 'جملة وتجهيز بلانكات',
+    position: { lat: 25.2741, lng: 55.3082 },
+    priceGuideAr: '6.5 – 16$ للقطعة جاهزة',
+    bestForAr: 'Private Label وشحن سريع لدول الخليج',
+    noRawFabricFriendly: true,
+  },
+  {
+    id: 'istanbul_merter',
+    locationKey: 'international_remote',
+    nameAr: 'ميرتر وعثمان بيه (إسطنبول)',
+    cityAr: 'تركيا',
+    category: 'factory',
+    categoryLabelAr: 'مصانع وجملة تصدير مرنة',
+    position: { lat: 41.0074, lng: 28.8906 },
+    priceGuideAr: '6 – 15$ FOB / قطعة',
+    bestForAr: 'تصنيع ستريت وير بكميات مرنة 50–150 قطعة',
+    noRawFabricFriendly: true,
+  },
+];

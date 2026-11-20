@@ -1,0 +1,203 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net (Default Deny)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Global Primitives
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isVerified() && request.auth.uid == userId;
+    }
+
+    function isValidUserProfile(data, userId) {
+      return data.keys().hasAll(['uid', 'displayName', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'displayName', 'photoURL', 'createdAt', 'updatedAt'])
+        && data.uid == request.auth.uid
+        && data.uid == userId
+        && isValidId(data.uid)
+        && data.displayName is string
+        && data.displayName.size() >= 1
+        && data.displayName.size() <= 120
+        && (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 500))
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidSavedScenario(data, userId, scenarioId) {
+      return data.keys().hasAll([
+          'id', 'ownerId', 'name', 'capital', 'currency', 'fxRate',
+          'location', 'market', 'category', 'fabric', 'gsm',
+          'sourcingOrigin', 'mfgModel', 'skuCount', 'volatility',
+          'salesChannel', 'unitCostUsd', 'suggestedRetailUsd',
+          'grossMarginPct', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'id', 'ownerId', 'name', 'capital', 'currency', 'fxRate',
+          'location', 'market', 'category', 'fabric', 'gsm',
+          'sourcingOrigin', 'mfgModel', 'skuCount', 'volatility',
+          'salesChannel', 'customUnitCost', 'customSellingPrice',
+          'unitCostUsd', 'suggestedRetailUsd', 'grossMarginPct',
+          'createdAt', 'updatedAt'
+        ])
+        && isValidId(data.id)
+        && data.id == scenarioId
+        && data.ownerId == request.auth.uid
+        && data.ownerId == userId
+        && data.name is string && data.name.size() >= 1 && data.name.size() <= 120
+        && data.capital is number && data.capital >= 0
+        && data.currency in ['EGP', 'USD']
+        && data.fxRate is number && data.fxRate >= 1 && data.fxRate <= 500
+        && data.location is string && data.location.size() >= 1 && data.location.size() <= 40
+        && data.market is string && data.market.size() >= 1 && data.market.size() <= 40
+        && data.category is string && data.category.size() >= 1 && data.category.size() <= 40
+        && data.fabric is string && data.fabric.size() >= 1 && data.fabric.size() <= 40
+        && data.gsm is number && data.gsm >= 80 && data.gsm <= 800
+        && data.sourcingOrigin in ['local', 'imported']
+        && data.mfgModel is string && data.mfgModel.size() >= 1 && data.mfgModel.size() <= 40
+        && data.skuCount is number && data.skuCount >= 1 && data.skuCount <= 40
+        && data.volatility is string && data.volatility.size() >= 1 && data.volatility.size() <= 20
+        && data.salesChannel is string && data.salesChannel.size() >= 1 && data.salesChannel.size() <= 20
+        && (!('customUnitCost' in data) || (data.customUnitCost is number && data.customUnitCost >= 0))
+        && (!('customSellingPrice' in data) || (data.customSellingPrice is number && data.customSellingPrice >= 0))
+        && data.unitCostUsd is number && data.unitCostUsd >= 0
+        && data.suggestedRetailUsd is number && data.suggestedRetailUsd >= 0
+        && data.grossMarginPct is number && data.grossMarginPct >= -1000 && data.grossMarginPct <= 100
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidBrandSession(data, userId, sessionId) {
+      return data.keys().hasAll([
+          'id', 'ownerId', 'brandName', 'tagline', 'styleDirection',
+          'palette', 'agreedGarments', 'designNotes', 'logoShape',
+          'motionStyle', 'continuityCode', 'summaryAr', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'id', 'ownerId', 'brandName', 'tagline', 'styleDirection',
+          'palette', 'agreedGarments', 'designNotes', 'logoShape',
+          'motionStyle', 'continuityCode', 'summaryAr', 'createdAt', 'updatedAt'
+        ])
+        && isValidId(data.id)
+        && data.id == sessionId
+        && data.ownerId == request.auth.uid
+        && data.ownerId == userId
+        && data.brandName is string && data.brandName.size() >= 1 && data.brandName.size() <= 100
+        && data.tagline is string && data.tagline.size() <= 180
+        && data.styleDirection is string && data.styleDirection.size() <= 60
+        && data.palette is list && data.palette.size() <= 6
+        && (data.palette.size() == 0 || (data.palette[0] is string && data.palette[0].size() <= 20))
+        && data.agreedGarments is list && data.agreedGarments.size() <= 12
+        && (data.agreedGarments.size() == 0 || (data.agreedGarments[0] is string && data.agreedGarments[0].size() <= 60))
+        && data.designNotes is string && data.designNotes.size() <= 1500
+        && data.logoShape is string && data.logoShape.size() <= 60
+        && data.motionStyle is string && data.motionStyle.size() <= 60
+        && data.continuityCode is string && data.continuityCode.size() <= 12000
+        && data.summaryAr is string && data.summaryAr.size() <= 3000
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    // Startup health probe document (contains no user data or PII)
+    match /test/connection {
+      allow get: if true;
+      allow list, write: if false;
+    }
+
+    // Private User Profile
+    match /users/{userId} {
+      allow get: if isValidId(userId) && isOwner(userId);
+      allow list: if false;
+      allow create: if isValidId(userId)
+        && isOwner(userId)
+        && isValidUserProfile(incoming(), userId)
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(userId)
+        && isOwner(userId)
+        && isValidUserProfile(incoming(), userId)
+        && incoming().uid == existing().uid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'photoURL', 'updatedAt']);
+      allow delete: if isValidId(userId) && isOwner(userId);
+
+      // Saved Simulator Scenarios
+      match /scenarios/{scenarioId} {
+        allow get: if isValidId(userId) && isValidId(scenarioId) && isOwner(userId);
+        allow list: if isValidId(userId) && isOwner(userId) && existing().ownerId == request.auth.uid;
+        allow create: if isValidId(userId)
+          && isValidId(scenarioId)
+          && isOwner(userId)
+          && isValidSavedScenario(incoming(), userId, scenarioId)
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time
+          && exists(/databases/$(database)/documents/users/$(userId));
+        allow update: if isValidId(userId)
+          && isValidId(scenarioId)
+          && isOwner(userId)
+          && isValidSavedScenario(incoming(), userId, scenarioId)
+          && incoming().id == existing().id
+          && incoming().ownerId == existing().ownerId
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && incoming().diff(existing()).affectedKeys().hasOnly([
+            'name', 'capital', 'currency', 'fxRate', 'location', 'market',
+            'category', 'fabric', 'gsm', 'sourcingOrigin', 'mfgModel',
+            'skuCount', 'volatility', 'salesChannel', 'customUnitCost',
+            'customSellingPrice', 'unitCostUsd', 'suggestedRetailUsd',
+            'grossMarginPct', 'updatedAt'
+          ]);
+        allow delete: if isValidId(userId) && isValidId(scenarioId) && isOwner(userId);
+      }
+
+      // Saved Brand Studio & Continuity Sessions
+      match /brandSessions/{sessionId} {
+        allow get: if isValidId(userId) && isValidId(sessionId) && isOwner(userId);
+        allow list: if isValidId(userId) && isOwner(userId) && existing().ownerId == request.auth.uid;
+        allow create: if isValidId(userId)
+          && isValidId(sessionId)
+          && isOwner(userId)
+          && isValidBrandSession(incoming(), userId, sessionId)
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time
+          && exists(/databases/$(database)/documents/users/$(userId));
+        allow update: if isValidId(userId)
+          && isValidId(sessionId)
+          && isOwner(userId)
+          && isValidBrandSession(incoming(), userId, sessionId)
+          && incoming().id == existing().id
+          && incoming().ownerId == existing().ownerId
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && incoming().diff(existing()).affectedKeys().hasOnly([
+            'brandName', 'tagline', 'styleDirection', 'palette',
+            'agreedGarments', 'designNotes', 'logoShape', 'motionStyle',
+            'continuityCode', 'summaryAr', 'updatedAt'
+          ]);
+        allow delete: if isValidId(userId) && isValidId(sessionId) && isOwner(userId);
+      }
+    }
+  }
+}

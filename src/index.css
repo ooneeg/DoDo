@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-sans: "IBM Plex Sans Arabic", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    background-color: #eef3f2;
+    color: #0f172a;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 12% 8%, rgba(13, 148, 136, 0.09), transparent 38%),
+      radial-gradient(circle at 88% 14%, rgba(217, 119, 6, 0.08), transparent 36%),
+      radial-gradient(circle at 50% 85%, rgba(30, 64, 175, 0.06), transparent 45%),
+      linear-gradient(180deg, #f3f6f5 0%, #eef2f5 52%, #f4f1ea 100%);
+    color: #0f172a;
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .font-mono-num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+}
